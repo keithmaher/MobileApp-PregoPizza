@@ -85,7 +85,7 @@ public class FoodMenu extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         switch (item.getItemId()) {
-                case R.id.menuHome : startActivity (new Intent(this, FoodMenu.class));
+                case R.id.cart : startActivity (new Intent(this, Cart.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

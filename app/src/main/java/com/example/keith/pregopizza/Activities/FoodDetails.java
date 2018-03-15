@@ -1,15 +1,17 @@
 package com.example.keith.pregopizza.Activities;
 
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.example.keith.pregopizza.Activities.Models.MenuM;
+import com.example.keith.pregopizza.Activities.Models.Order;
+import com.example.keith.pregopizza.Activities.Database.Database;
 import com.example.keith.pregopizza.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,6 +31,8 @@ public class FoodDetails extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference foods;
+
+    MenuM currentFood;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +59,11 @@ public class FoodDetails extends AppCompatActivity {
         cartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                new Database(getBaseContext()).addToCart(new Order(menuId, currentFood.getName(),
+                        quantityButton.getNumber(), currentFood.getPrice()
+
+                        ));
+                Toast.makeText(FoodDetails.this, "Added to Cart", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -66,13 +73,13 @@ public class FoodDetails extends AppCompatActivity {
         foods.child(foodId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                MenuM food = dataSnapshot.getValue(MenuM.class);
+                currentFood = dataSnapshot.getValue(MenuM.class);
 
-                Picasso.with(getBaseContext()).load(food.getImage()).into(food_image);
+                Picasso.with(getBaseContext()).load(currentFood.getImage()).into(food_image);
 
-                food_price.setText(food.getPrice());
-                food_name.setText(food.getName());
-                food_descriprion.setText(food.getToppings());
+                food_price.setText(currentFood.getPrice());
+                food_name.setText(currentFood.getName());
+                food_descriprion.setText(currentFood.getToppings());
             }
 
             @Override

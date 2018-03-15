@@ -4,9 +4,15 @@
     tools:context="com.example.keith.pregopizza.Activities.FoodMenu">
 
     <item
-        android:id="@+id/menuHome"
+        android:id="@+id/menu"
         android:orderInCategory="100"
-        android:title="Home"
+        android:title="Menu"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/cart"
+        android:orderInCategory="100"
+        android:title="Cart"
         app:showAsAction="never"/>
 
 </menu>
