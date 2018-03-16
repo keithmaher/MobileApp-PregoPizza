@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,6 +39,7 @@ public class FoodDetails extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference foods;
+    DatabaseReference table_customer;
 
     MenuM currentFood;
 
@@ -48,6 +50,8 @@ public class FoodDetails extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         foods = database.getReference("menu");
+
+        table_customer = database.getReference("order");
 
         quantityButton = findViewById(R.id.number_button);
         cartButton = findViewById(R.id.cartButton);
@@ -69,17 +73,29 @@ public class FoodDetails extends AppCompatActivity {
                 saveData();
             }
         });
+
+
+    }
+
+    public void onBackPressed()
+    {
+        finish();
     }
 
     private void  saveData(){
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString("key_id", menuId);
-        editor.putString("key_name", currentFood.getName());
-        editor.putString("key_quantity", quantityButton.getNumber());
-        editor.putString("key_price", currentFood.getPrice());
-        Toast.makeText(this, "Order: " + currentFood.getName(), Toast.LENGTH_SHORT).show();
-        editor.commit();
+//        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+//        SharedPreferences.Editor editor = pref.edit();
+//        editor.putString("key_id", menuId);
+//        editor.putString("key_name", currentFood.getName());
+//        editor.putString("key_quantity", quantityButton.getNumber());
+//        editor.putString("key_price", currentFood.getPrice());
+//        Toast.makeText(this, "Order: " + currentFood.getName(), Toast.LENGTH_SHORT).show();
+
+        Order order = new Order(menuId, currentFood.getName(), quantityButton.getNumber(), currentFood.getPrice());
+        String id = Order.getId();
+        table_customer.child(id).child(menuId).setValue(order);
+
+//        editor.apply();
     }
 
 

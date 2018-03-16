@@ -1,24 +1,38 @@
 package com.example.keith.pregopizza.Activities.Models;
 
+import java.util.List;
+
 /**
  * Created by Keith on 14/03/2018.
  */
 
 public class Order {
 
+    static int id = 1;
     private String ProductId;
     private String ProductName;
     private String Quantity;
     private String Price;
 
+    private List<Order> Order;
+
+    public List<com.example.keith.pregopizza.Activities.Models.Order> getOrder() {
+        return Order;
+    }
+
     public Order() {
     }
 
     public Order(String productId, String productName, String quantity, String price) {
+        id = id++;
         ProductId = productId;
         ProductName = productName;
         Quantity = quantity;
         Price = price;
+    }
+
+    public static String getId() {
+        return String.valueOf(id);
     }
 
     public String getProductId() {
