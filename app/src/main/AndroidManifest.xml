@@ -26,9 +26,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.FoodDetails" />
+        <activity android:name=".Activities.FoodDetails"
+            />
 
-        <activity android:name=".Activities.Cart"/>
+        <activity android:name=".Activities.Cart"
+            android:label="@string/your_cart"/>
     </application>
 
 </manifest>

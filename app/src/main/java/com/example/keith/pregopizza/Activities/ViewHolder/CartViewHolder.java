@@ -27,8 +27,12 @@ public class CartViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         img_cart_count = itemView.findViewById(R.id.cart_item_count);
     }
 
-    @Override
-    public void onClick(View v) {
+    public void setItemClickListener(ItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
 
+    @Override
+    public void onClick(View view) {
+        itemClickListener.onClick(view, getAdapterPosition(), false);
     }
 }

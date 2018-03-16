@@ -1,10 +1,9 @@
 package com.example.keith.pregopizza.Activities;
 
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,14 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class FoodDetails extends AppCompatActivity {
 
@@ -83,19 +75,14 @@ public class FoodDetails extends AppCompatActivity {
     }
 
     private void  saveData(){
-//        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
-//        SharedPreferences.Editor editor = pref.edit();
-//        editor.putString("key_id", menuId);
-//        editor.putString("key_name", currentFood.getName());
-//        editor.putString("key_quantity", quantityButton.getNumber());
-//        editor.putString("key_price", currentFood.getPrice());
-//        Toast.makeText(this, "Order: " + currentFood.getName(), Toast.LENGTH_SHORT).show();
 
         Order order = new Order(menuId, currentFood.getName(), quantityButton.getNumber(), currentFood.getPrice());
         String id = Order.getId();
         table_customer.child(id).child(menuId).setValue(order);
-
-//        editor.apply();
+        Intent back = new Intent(FoodDetails.this, FoodMenu.class);
+        startActivity(back);
+        Toast.makeText(this, quantityButton.getNumber()+" "+ currentFood.getName()+" added to your Cart", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
 
@@ -105,9 +92,7 @@ public class FoodDetails extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 currentFood = dataSnapshot.getValue(MenuM.class);
-
                 Picasso.with(getBaseContext()).load(currentFood.getImage()).into(food_image);
-
                 food_price.setText(currentFood.getPrice());
                 food_name.setText(currentFood.getName());
                 food_descriprion.setText(currentFood.getToppings());

@@ -11,15 +11,16 @@ public class Requests {
     private String phone;
     private String name;
     private String address;
-//    private List<Order> foods;
+    private List<Order> foods;
 
     public Requests() {
     }
 
-    public Requests(String phone, String name, String address) {
+    public Requests(String phone, String name, String address, List<Order> foods) {
         this.phone = phone;
         this.name = name;
         this.address = address;
+        this.foods = foods;
     }
 
     public String getPhone() {
@@ -46,4 +47,11 @@ public class Requests {
         this.address = address;
     }
 
+    public List<Order> getFoods() {
+        return foods;
+    }
+
+    public void setFoods(List<Order> foods) {
+        this.foods = foods;
+    }
 }

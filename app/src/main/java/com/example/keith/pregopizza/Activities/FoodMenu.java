@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.keith.pregopizza.Activities.Interface.ItemClickListener;
 import com.example.keith.pregopizza.Activities.Models.MenuM;
@@ -44,15 +45,11 @@ public class FoodMenu extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         loadListFood();
 
-
     }
 
     private void loadListFood() {
 
-        adapter = new FirebaseRecyclerAdapter<MenuM, MenuViewHolder>(MenuM.class,
-                R.layout.menu_row,
-                MenuViewHolder.class,
-                foodMenuList)
+        adapter = new FirebaseRecyclerAdapter<MenuM, MenuViewHolder>(MenuM.class, R.layout.menu_row, MenuViewHolder.class, foodMenuList)
 
         {
             @Override
@@ -77,14 +74,17 @@ public class FoodMenu extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the Category; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.top_menu, menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         switch (item.getItemId()) {
+
+                case R.id.orders : Toast.makeText(this, "Available in Version 2", Toast.LENGTH_SHORT).show();
+                break;
+
                 case R.id.cart : startActivity (new Intent(this, Cart.class));
                 break;
         }

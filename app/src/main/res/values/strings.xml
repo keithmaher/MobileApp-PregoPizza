@@ -1,4 +1,23 @@
 <resources>
     <string name="app_name">Prego Pizza</string>
-    <string name="menu_title">Menu</string>
+    <string name="menu_title">Prego Pizza</string>
+    <string name="home">Home</string>
+    <string name="my_orders">My Orders</string>
+    <string name="my_cart">My Cart</string>
+    <string name="place_order">Place Order</string>
+    <string name="total">Total:</string>
+    <string name="_0">€0</string>
+    <string name="food_name">Food Name</string>
+    <string name="description">Description</string>
+    <string name="_10_00">10.00</string>
+    <string name="no_don_t">No Don\'t</string>
+    <string name="give_me_pizza">Give me Pizza</string>
+    <string name="address">Address</string>
+    <string name="number">Number</string>
+    <string name="last_few_step_s">Last Few Step\'s</string>
+    <string name="food_01">Food 01</string>
+    <string name="_100000">100000</string>
+    <string name="view">View</string>
+    <string name="name">Name</string>
+    <string name="your_cart">Your Cart</string>
 </resources>
