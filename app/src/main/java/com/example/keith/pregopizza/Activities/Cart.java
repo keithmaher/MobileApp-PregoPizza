@@ -1,6 +1,7 @@
 package com.example.keith.pregopizza.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.keith.pregopizza.Activities.Models.Order;
 import com.example.keith.pregopizza.Activities.Database.Database;
@@ -16,7 +18,10 @@ import com.example.keith.pregopizza.Activities.ViewHolder.CartAdapter;
 import com.example.keith.pregopizza.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +38,7 @@ public class Cart extends AppCompatActivity {
     TextView txtTotalPrice;
     Button placeOrder;
 
-    List<Order> cart = new ArrayList<>();
+    List<Order> cart = new ArrayList<Order>();
 
     CartAdapter adapter;
 
@@ -56,7 +61,17 @@ public class Cart extends AppCompatActivity {
         txtTotalPrice = findViewById(R.id.total);
         placeOrder = findViewById(R.id.placeOrder);
 
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+        String id = pref.getString("key_id", null);
+        String name = pref.getString("key_name", null);
+        String quantity = pref.getString("key_quantity", null);
+        String price = pref.getString("key_price", null);
 
+        Toast.makeText(this, "Showing: " + name, Toast.LENGTH_SHORT).show();
+
+        Order orders = new Order(id, name, quantity, price);
+
+        cart.add(0,orders);
 
         loadListFoods();
 
@@ -64,13 +79,12 @@ public class Cart extends AppCompatActivity {
 
     private void loadListFoods() {
 
-        cart = new Database(this).getCarts();
-        adapter = new CartAdapter(cart,this);
+        adapter = new CartAdapter(cart, this);
         recyclerView.setAdapter(adapter);
 
-        int total = 0;
+        Double total = 0.0;
         for (Order order:cart)
-            total+=(Integer.parseInt(order.getPrice()))*(Integer.parseInt(order.getQuantity()));
+            total+=(Double.parseDouble(order.getPrice()))*(Double.parseDouble(order.getQuantity()));
         Locale locale = new Locale("en", "IE");
         NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
 

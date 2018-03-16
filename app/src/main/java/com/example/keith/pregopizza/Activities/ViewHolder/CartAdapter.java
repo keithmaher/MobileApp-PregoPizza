@@ -30,9 +30,6 @@ class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickList
 
     private ItemClickListener itemClickListener;
 
-    public void setTxt_cart_name(TextView txt_cart_name) {
-        this.txt_cart_name = txt_cart_name;
-    }
 
     public CartViewHolder(View itemView) {
         super(itemView);
@@ -70,9 +67,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder>{
                 .buildRound(""+listData.get(position).getQuantity(), Color.RED);
         holder.img_cart_count.setImageDrawable(drawable);
 
-        Locale locale = new Locale("en", "US");
+        Locale locale = new Locale("en", "IE");
         NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
-        int price = (Integer.parseInt(listData.get(position).getPrice()))*(Integer.parseInt(listData.get(position).getQuantity()));
+        Float price = (Float.parseFloat(listData.get(position).getPrice()))*(Float.parseFloat(listData.get(position).getQuantity()));
         holder.txt_cart_price.setText(fmt.format(price));
         holder.txt_cart_name.setText(listData.get(position).getProductName());
     }

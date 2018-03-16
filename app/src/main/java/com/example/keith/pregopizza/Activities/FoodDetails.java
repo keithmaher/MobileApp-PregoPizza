@@ -1,8 +1,10 @@
 package com.example.keith.pregopizza.Activities;
 
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,14 +13,19 @@ import android.widget.Toast;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.example.keith.pregopizza.Activities.Models.MenuM;
 import com.example.keith.pregopizza.Activities.Models.Order;
-import com.example.keith.pregopizza.Activities.Database.Database;
 import com.example.keith.pregopizza.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class FoodDetails extends AppCompatActivity {
 
@@ -59,14 +66,22 @@ public class FoodDetails extends AppCompatActivity {
         cartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Database(getBaseContext()).addToCart(new Order(menuId, currentFood.getName(),
-                        quantityButton.getNumber(), currentFood.getPrice()
-
-                        ));
-                Toast.makeText(FoodDetails.this, "Added to Cart", Toast.LENGTH_SHORT).show();
+                saveData();
             }
         });
     }
+
+    private void  saveData(){
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("key_id", menuId);
+        editor.putString("key_name", currentFood.getName());
+        editor.putString("key_quantity", quantityButton.getNumber());
+        editor.putString("key_price", currentFood.getPrice());
+        Toast.makeText(this, "Order: " + currentFood.getName(), Toast.LENGTH_SHORT).show();
+        editor.commit();
+    }
+
 
     private void getDetailFood(String foodId){
 

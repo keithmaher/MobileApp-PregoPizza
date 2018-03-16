@@ -36,6 +36,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     //Add Library
+    compile 'com.google.code.gson:gson:2.7'
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
     compile 'gr.pantrif:easy-android-splash-screen:0.0.1'
     compile 'com.android.support:recyclerview-v7:26.+'
