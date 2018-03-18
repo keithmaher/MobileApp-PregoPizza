@@ -8,7 +8,8 @@ import java.util.List;
 
 public class Order {
 
-    static int id = 1;
+    static int count = 1;
+    static int id;
     private String ProductId;
     private String ProductName;
     private String Quantity;
@@ -24,7 +25,7 @@ public class Order {
     }
 
     public Order(String productId, String productName, String quantity, String price) {
-        id = id++;
+        id = count ++;
         ProductId = productId;
         ProductName = productName;
         Quantity = quantity;

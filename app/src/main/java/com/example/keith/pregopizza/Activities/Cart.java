@@ -16,15 +16,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
-import com.example.keith.pregopizza.Activities.Interface.ItemClickListener;
-import com.example.keith.pregopizza.Activities.Models.MenuM;
 import com.example.keith.pregopizza.Activities.Models.Order;
 import com.example.keith.pregopizza.Activities.Models.Requests;
 import com.example.keith.pregopizza.Activities.ViewHolder.CartViewHolder;
 import com.example.keith.pregopizza.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -59,6 +60,7 @@ public class Cart extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         orders = database.getReference("order");
+        orders = orders.child("order");
         request = database.getReference("requests");
 
         recyclerView = findViewById(R.id.listCart);
@@ -113,7 +115,7 @@ public class Cart extends AppCompatActivity {
                     orders.getRef().removeValue();
                     txtTotalPrice.setText("0");
                     dialog.dismiss();
-                    Toast.makeText(Cart.this, "Your Order has been submitted to our Database", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Cart.this, "Thank you " + Name + " your order has been recieved and will be delivered to " +Address, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -133,7 +135,7 @@ public class Cart extends AppCompatActivity {
         adapter = new FirebaseRecyclerAdapter<Order, CartViewHolder>(Order.class,
                 R.layout.cart_layout,
                 CartViewHolder.class,
-                orders.child(Order.getId()))
+                orders)
 
         {
 
@@ -145,17 +147,42 @@ public class Cart extends AppCompatActivity {
 
                   double price = Double.parseDouble(model.getPrice());
                   double quantity = Double.parseDouble(model.getQuantity());
-                  double total = price*quantity;
-                  String total2 = String.valueOf(total);
-                  viewHolder.txt_cart_price.setText(total2);
+                  final double total= price * quantity;
+                  String runtotal = String.valueOf(total);
+                  viewHolder.txt_cart_price.setText(runtotal);
                   viewHolder.txt_cart_name.setText(model.getProductName());
 
-                  txtTotalPrice.setText(total2);
+
+                  orders.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+//////////////////////////////////////////////////////////////////////////////////////////
+                        /////////////////////////////////////////////////////////////////
+
+                        //    THIS SECTION IS NOT WORKING.
+                        //    TRYING TO CREATE A RUNNING TOTAL OF ALL ITEMS IN ORDERS.
+
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            Order order = snapshot.getValue(Order.class);
+                            double runprice = Double.parseDouble(order.getPrice());
+                            double runquant = Double.parseDouble(order.getQuantity());
+                            String rtotal = "";
+                            rtotal = String.valueOf(rtotal+runprice*runquant);
+                            txtTotalPrice.setText(rtotal);
+                        }
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+/////////////////////////////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////////////
 
             }
 
         };
-
 
         recyclerView.setAdapter(adapter);
 
@@ -163,7 +190,7 @@ public class Cart extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_menu, menu);
+        getMenuInflater().inflate(R.menu.cart_menu, menu);
         return true;
     }
 
@@ -175,6 +202,12 @@ public class Cart extends AppCompatActivity {
                 break;
 
             case R.id.menu : startActivity (new Intent(this, FoodMenu.class));
+                break;
+
+            case R.id.remove : if (recyclerView.getChildCount() == 0) {
+                Toast.makeText(Cart.this, "Nothing in your Cart", Toast.LENGTH_SHORT).show();
+            } else {orders.getRef().removeValue(); txtTotalPrice.setText("0");
+                Toast.makeText(Cart.this, "Cart cleared", Toast.LENGTH_SHORT).show();}
                 break;
         }
         return super.onOptionsItemSelected(item);
