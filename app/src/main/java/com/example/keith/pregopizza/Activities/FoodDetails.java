@@ -20,6 +20,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 public class FoodDetails extends AppCompatActivity {
 
     TextView food_name, food_price, food_descriprion;
@@ -76,9 +78,11 @@ public class FoodDetails extends AppCompatActivity {
 
     private void  saveData(){
 
+
         Order order = new Order(menuId, currentFood.getName(), quantityButton.getNumber(), currentFood.getPrice());
         String id = Order.getId();
-        table_customer.child("order").child(id).setValue(order);
+        //String key = table_customer.push().getKey();
+        table_customer.child("My order").child(id).setValue(order);
         Intent back = new Intent(FoodDetails.this, FoodMenu.class);
         startActivity(back);
         Toast.makeText(this, quantityButton.getNumber()+" "+ currentFood.getName()+" added to your Cart", Toast.LENGTH_SHORT).show();

@@ -15,12 +15,6 @@ public class Order {
     private String Quantity;
     private String Price;
 
-    private List<Order> Order;
-
-    public List<com.example.keith.pregopizza.Activities.Models.Order> getOrder() {
-        return Order;
-    }
-
     public Order() {
     }
 
@@ -64,7 +58,18 @@ public class Order {
         return Price;
     }
 
+
     public void setPrice(String price) {
         Price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "ProductId='" + ProductId + '\'' +
+                ", ProductName='" + ProductName + '\'' +
+                ", Quantity='" + Quantity + '\'' +
+                ", Price='" + Price + '\'' +
+                '}';
     }
 }

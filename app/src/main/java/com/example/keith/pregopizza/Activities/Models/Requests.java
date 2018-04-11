@@ -1,22 +1,23 @@
 package com.example.keith.pregopizza.Activities.Models;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Keith on 16/03/2018.
  */
 
 public class Requests {
-
     private String phone;
     private String name;
     private String address;
-    private List<Order> foods;
+    private ArrayList<ArrayList<Order>> foods;
 
     public Requests() {
     }
 
-    public Requests(String phone, String name, String address, List<Order> foods) {
+    public Requests(String phone, String name, String address, ArrayList<ArrayList<Order>> foods) {
         this.phone = phone;
         this.name = name;
         this.address = address;
@@ -47,11 +48,11 @@ public class Requests {
         this.address = address;
     }
 
-    public List<Order> getFoods() {
+    public ArrayList<ArrayList<Order>> getFoods() {
         return foods;
     }
 
-    public void setFoods(List<Order> foods) {
+    public void setFoods(ArrayList<ArrayList<Order>> foods) {
         this.foods = foods;
     }
 }

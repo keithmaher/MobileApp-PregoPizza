@@ -1,12 +1,21 @@
 package com.example.keith.pregopizza.Activities;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -19,7 +28,7 @@ import com.example.keith.pregopizza.Activities.ViewHolder.MenuViewHolder;
 import com.example.keith.pregopizza.R;
 import com.squareup.picasso.Picasso;
 
-public class FoodMenu extends AppCompatActivity {
+public class FoodMenu extends Navigation{
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
@@ -31,7 +40,12 @@ public class FoodMenu extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //inflate your activity layout here!
+        @SuppressLint("InflateParams")
+        View contentView = inflater.inflate(R.layout.activity_menu, null, false);
+        drawer.addView(contentView, 0);
+        navigationView.setCheckedItem(R.id.nav_camera);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -46,6 +60,21 @@ public class FoodMenu extends AppCompatActivity {
         loadListFood();
 
     }
+
+    @Override
+    public void onBackPressed() {
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                finishAffinity();
+            } else {
+                super.onBackPressed();
+            }
+        }
+    }
+
 
     private void loadListFood() {
 
@@ -70,25 +99,6 @@ public class FoodMenu extends AppCompatActivity {
         };
 
         recyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(android.view.MenuItem item) {
-        switch (item.getItemId()) {
-
-                case R.id.orders : Toast.makeText(this, "Available in Version 2", Toast.LENGTH_SHORT).show();
-                break;
-
-                case R.id.cart : startActivity (new Intent(this, Cart.class));
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 }
