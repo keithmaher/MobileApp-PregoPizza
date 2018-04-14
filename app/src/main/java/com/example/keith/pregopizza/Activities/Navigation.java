@@ -37,23 +37,35 @@ public class Navigation extends Main implements NavigationView.OnNavigationItemS
 
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        Menu nav_Menu = navigationView.getMenu();
 
         View userView = navigationView.getHeaderView(0);
-
         nav_name = userView.findViewById(R.id.nav_name);
         nav_email = userView.findViewById(R.id.nav_email);
+
+        if (Storage.currentCustomer == null){
+            Toast.makeText(this, "No one logged in", Toast.LENGTH_SHORT).show();
+            nav_name.setText("You need to login");
+            nav_email.setText("to view more options");
+            nav_Menu.findItem(R.id.nav_logout).setVisible(false);
+            nav_Menu.findItem(R.id.nav_gallery).setVisible(false);
+            nav_Menu.findItem(R.id.nav_profile).setVisible(false);
+            nav_Menu.findItem(R.id.nav_orders).setVisible(false);
+        }else {
 
         String username = Storage.currentCustomer.getName();
         String useremail = Storage.currentCustomer.getEmail();
         nav_name.setText(username);
         nav_email.setText(useremail);
+        nav_Menu.findItem(R.id.nav_login).setVisible(false);
+        nav_Menu.findItem(R.id.nav_register).setVisible(false);
+        }
 
     }
 
@@ -70,10 +82,12 @@ public class Navigation extends Main implements NavigationView.OnNavigationItemS
         } else if (id == R.id.nav_logout) {
             Storage.currentCustomer = null;
             startActivity(new Intent(this, Main.class));
+        } else if (id == R.id.nav_register) {
+            registerDialog();
         }
 
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

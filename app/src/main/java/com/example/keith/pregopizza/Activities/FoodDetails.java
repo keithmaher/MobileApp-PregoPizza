@@ -84,10 +84,10 @@ public class FoodDetails extends AppCompatActivity {
             Toast.makeText(this, "No one logged in", Toast.LENGTH_SHORT).show();
         }else {
             carts.child(Storage.currentCustomer.getPhoneNumber()).child(id).setValue(order);
+            Toast.makeText(this, quantityButton.getNumber() + " " + currentFood.getName() + " added to your Order", Toast.LENGTH_SHORT).show();
         }
         Intent back = new Intent(FoodDetails.this, FoodMenu.class);
         startActivity(back);
-        Toast.makeText(this, quantityButton.getNumber()+" "+ currentFood.getName()+" added to your Order", Toast.LENGTH_SHORT).show();
         finish();
     }
 

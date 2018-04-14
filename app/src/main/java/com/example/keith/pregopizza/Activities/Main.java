@@ -24,8 +24,6 @@ public class Main extends AppCompatActivity {
     DatabaseReference customers;
 
     Button mainMenuButton;
-    Button mainLoginButton;
-    Button mainRegisterButton;
 
     AlertDialog.Builder alertDialog;
     AlertDialog dialog;
@@ -50,31 +48,11 @@ public class Main extends AppCompatActivity {
         customers = database.getReference("customers");
 
         mainMenuButton = findViewById(R.id.mainMenuButton);
-        mainLoginButton = findViewById(R.id.mainLoginButton);
-        mainRegisterButton = findViewById(R.id.mainRegButton);
 
         mainMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Main.this, FoodMenu.class));
-            }
-        });
-
-        mainLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                    loginDialog();
-
-            }
-        });
-
-        mainRegisterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                registerDialog();
-
             }
         });
 

@@ -42,11 +42,11 @@
     <string name="title_activity_navigation">Navigation</string>
     <string name="mainRegButton">Regrister</string>
     <string name="mainLoginButton">Login</string>
-    <string name="mainMenu">Menu</string>
+    <string name="mainMenu">View Menu</string>
     <string name="loginHeading">Please Login</string>
     <string name="loginPhoneNumber">Phone Number</string>
     <string name="loginPassword">Password</string>
     <string name="login">Login</string>
     <string name="loginCancelButton">Cancel</string>
-    <string name="registerHeading">Register Please</string>
+    <string name="registerHeading">Please Register</string>
 </resources>

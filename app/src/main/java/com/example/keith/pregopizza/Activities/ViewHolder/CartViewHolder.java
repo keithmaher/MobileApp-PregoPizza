@@ -1,12 +1,18 @@
 package com.example.keith.pregopizza.Activities.ViewHolder;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.keith.pregopizza.Activities.Interface.ItemClickListener;
+import com.example.keith.pregopizza.Activities.Models.Order;
 import com.example.keith.pregopizza.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Keith on 16/03/2018.

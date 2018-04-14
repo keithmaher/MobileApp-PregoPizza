@@ -32,6 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Cart extends Navigation{
 
@@ -47,10 +48,12 @@ public class Cart extends Navigation{
 
     AlertDialog.Builder alertDialog;
     AlertDialog dialog;
-    EditText edname, ednumber, edaddress;
+    EditText cart_address;
+    TextView cart_name, cart_number;
     Button yesButton, noButton;
 
-    ArrayList<ArrayList<Order>> newOrder;
+    List<Order> cart = new ArrayList<>();
+
 
     FirebaseRecyclerAdapter<Order, CartViewHolder> adapter;
 
@@ -87,68 +90,26 @@ public class Cart extends Navigation{
         placeOrder = findViewById(R.id.placeOrder);
 
 
+
+
         loadListFoods();
 
-//        DataSnapshot userSnapshot = null;
-//        Order value = userSnapshot.getValue(Order.class);
-//        newOrder = new ArrayList<>();
-//        ArrayList<Order> order1 = new ArrayList<>();
-//        order1.add(value);
-//        newOrder.add(order1);
 
+        carts.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
 
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    Order order = userSnapshot.getValue(Order.class);
+                    cart.add(order);
+                }
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-//        orders.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot snapshot) {
-//
-//                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-//
-//
-////                    newOrder = new ArrayList<>();
-////
-////                    ArrayList<Order> order1 = new ArrayList<>();
-////                    order1.add(userSnapshot.getValue(Order.class));
-////
-////
-////                    newOrder.add(order1);
-//
-// //                   newOrder.add(userSnapshot.getValue(Order.class));
-//
-//
-//                            //userSnapshot.getValue(Order.class);
-//
-////                    int id = Integer.parseInt(order1.getProductId());
-//
-////                    for (int i = 0; i < snapshot.getChildrenCount(); i++){
-////
-// //                       newOrder = new ArrayList<>();
-// //                       newOrder.add(new Order());
-////                        newOrder.add(order1);
-////                    }
-//
-////                      newOrder = new ArrayList<>();
-////                      newOrder.add(order1);
-//
-//
-//
-//                      //Log.i("Message", "" + order1);
-//
-//                    Toast.makeText(Order.this, ""+newOrder.toString(), Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
-
-
-
+            }
+        });
 
         placeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,41 +127,37 @@ public class Cart extends Navigation{
     private void checkoutDialog() {
 
         alertDialog = new AlertDialog.Builder(this);
-        View view = getLayoutInflater().inflate(R.layout.dialog, null);
+        View view = getLayoutInflater().inflate(R.layout.checkout, null);
         yesButton = view.findViewById(R.id.yes);
         noButton = view.findViewById(R.id.no);
-        edname = view.findViewById(R.id.edtname);
-        ednumber = view.findViewById(R.id.ednumber);
-        edaddress = view.findViewById(R.id.edtaddress);
+        cart_name = view.findViewById(R.id.cart_name);
+        cart_number = view.findViewById(R.id.cart_number);
+        cart_address = view.findViewById(R.id.cart_address);
         alertDialog.setView(view);
         dialog = alertDialog.create();
         dialog.show();
+
+        cart_name.setText(Storage.currentCustomer.getName());
+        cart_number.setText(Storage.currentCustomer.getPhoneNumber());
+
+        final String name = cart_name.getText().toString();
+        final String phone = cart_number.getText().toString();
 
 
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String Address =  edaddress.getText().toString();
-                String Name = edname.getText().toString();
-                String Phone = ednumber.getText().toString();
-                if (Name.isEmpty() || Address.isEmpty() || Phone.isEmpty()){
+                String address =  cart_address.getText().toString();
+                if (name.isEmpty() || address.isEmpty() || phone.isEmpty()){
                     Toast.makeText(Cart.this, "Make sure details are all filled correctly!", Toast.LENGTH_SHORT).show();
                 }else {
-
-//                    DataSnapshot userSnapshot = null;
-//                    Order value = userSnapshot.getValue(Order.class);
-//                    newOrder = new ArrayList<>();
-//                    ArrayList<Order> order1 = new ArrayList<>();
-//                    order1.add(value);
-//                    newOrder.add(order1);
-
-                    Requests requests = new Requests(Phone, Name, Address, newOrder);
+                    Requests requests = new Requests(phone, name, address, cart);
                     String id = Requests.getId();
                     orders.child(Storage.currentCustomer.getPhoneNumber()).child(id).setValue(requests);
                     carts.getRef().removeValue();
                     txtTotalPrice.setText("0");
                     dialog.dismiss();
-                    Toast.makeText(Cart.this, "Thank you " + Name + " your order has been recieved and will be delivered to " +Address, Toast.LENGTH_LONG).show();
+                    Toast.makeText(Cart.this, "Thank you " + name + " your order has been recieved", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -217,12 +174,7 @@ public class Cart extends Navigation{
 
     private void loadListFoods() {
 
-        adapter = new FirebaseRecyclerAdapter<Order, CartViewHolder>(Order.class,
-                R.layout.cart_layout,
-                CartViewHolder.class,
-                carts)
-
-        {
+        adapter = new FirebaseRecyclerAdapter<Order, CartViewHolder>(Order.class, R.layout.cart_layout, CartViewHolder.class, carts) {
 
             @Override
             protected void populateViewHolder(CartViewHolder viewHolder, final Order model, int position) {
@@ -238,29 +190,29 @@ public class Cart extends Navigation{
                 viewHolder.txt_cart_name.setText(model.getProductName());
 
 
-                carts.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-//////////////////////////////////////////////////////////////////////////////////////////
-                        /////////////////////////////////////////////////////////////////
-
-                        //    THIS SECTION IS NOT WORKING.
-                        //    TRYING TO CREATE A RUNNING TOTAL OF ALL ITEMS IN ORDERS.
-
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            Order order = snapshot.getValue(Order.class);
-                            double runprice = Double.parseDouble(order.getPrice());
-                            double runquant = Double.parseDouble(order.getQuantity());
-                            String rtotal = "";
-                            rtotal = String.valueOf(rtotal+runprice*runquant);
-                            txtTotalPrice.setText(rtotal);
-                        }
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
-                });
+//                carts.addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//
+////////////////////////////////////////////////////////////////////////////////////////////
+//                        /////////////////////////////////////////////////////////////////
+//
+//                        //    THIS SECTION IS NOT WORKING.
+//                        //    TRYING TO CREATE A RUNNING TOTAL OF ALL ITEMS IN ORDERS.
+//
+//                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                            Order order = snapshot.getValue(Order.class);
+//                            double runprice = Double.parseDouble(order.getPrice());
+//                            double runquant = Double.parseDouble(order.getQuantity());
+//                            String rtotal = "";
+//                            rtotal = String.valueOf(rtotal+runprice*runquant);
+//                            txtTotalPrice.setText(rtotal);
+//                        }
+//                    }
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//                    }
+//                });
 
 /////////////////////////////////////////////////////////////////////////////////////////
                 ////////////////////////////////////////////////////////////////////////

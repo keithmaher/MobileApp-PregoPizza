@@ -1,6 +1,7 @@
 package com.example.keith.pregopizza.Activities.Models;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Keith on 16/03/2018.
@@ -12,12 +13,12 @@ public class Requests {
     private String phone;
     private String name;
     private String address;
-    private ArrayList<ArrayList<Order>> foods;
+    private List<Order> foods;
 
     public Requests() {
     }
 
-    public Requests(String phone, String name, String address, ArrayList<ArrayList<Order>> foods) {
+    public Requests(String phone, String name, String address, List<Order> foods) {
         id = count ++;
         this.phone = phone;
         this.name = name;
@@ -53,11 +54,11 @@ public class Requests {
         this.address = address;
     }
 
-    public ArrayList<ArrayList<Order>> getFoods() {
+    public List<Order> getFoods() {
         return foods;
     }
 
-    public void setFoods(ArrayList<ArrayList<Order>> foods) {
+    public void setFoods(List<Order> foods) {
         this.foods = foods;
     }
 }
