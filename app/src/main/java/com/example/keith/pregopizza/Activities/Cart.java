@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.example.keith.pregopizza.Activities.Models.Order;
 import com.example.keith.pregopizza.Activities.Models.Requests;
+import com.example.keith.pregopizza.Activities.Sessions.Storage;
 import com.example.keith.pregopizza.Activities.ViewHolder.CartViewHolder;
 import com.example.keith.pregopizza.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -73,8 +74,14 @@ public class Cart extends Navigation{
         setSupportActionBar(toolbar);
 
         database = FirebaseDatabase.getInstance();
-        orders = database.getReference("order");
-        orders = orders.child("My order");
+        orders = database.getReference("orders");
+        if (Storage.currentCustomer == null){
+            Toast.makeText(this, "No one logged in", Toast.LENGTH_SHORT).show();
+        }else{
+            String user = Storage.currentCustomer.getPhoneNumber();
+            orders = orders.child(user);
+        }
+
         request = database.getReference("requests");
 
         recyclerView = findViewById(R.id.listCart);

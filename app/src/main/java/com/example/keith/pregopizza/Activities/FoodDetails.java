@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.example.keith.pregopizza.Activities.Models.MenuM;
 import com.example.keith.pregopizza.Activities.Models.Order;
+import com.example.keith.pregopizza.Activities.Sessions.Storage;
 import com.example.keith.pregopizza.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,7 +34,7 @@ public class FoodDetails extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference foods;
-    DatabaseReference table_customer;
+    DatabaseReference orders;
 
     MenuM currentFood;
 
@@ -45,7 +46,7 @@ public class FoodDetails extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         foods = database.getReference("menu");
 
-        table_customer = database.getReference("order");
+        orders = database.getReference("orders");
 
         quantityButton = findViewById(R.id.number_button);
         cartButton = findViewById(R.id.cartButton);
@@ -81,8 +82,11 @@ public class FoodDetails extends AppCompatActivity {
 
         Order order = new Order(menuId, currentFood.getName(), quantityButton.getNumber(), currentFood.getPrice());
         String id = Order.getId();
-        //String key = table_customer.push().getKey();
-        table_customer.child("My order").child(id).setValue(order);
+        if (Storage.currentCustomer == null){
+            Toast.makeText(this, "No one logged in", Toast.LENGTH_SHORT).show();
+        }else {
+            orders.child(Storage.currentCustomer.getPhoneNumber()).child(id).setValue(order);
+        }
         Intent back = new Intent(FoodDetails.this, FoodMenu.class);
         startActivity(back);
         Toast.makeText(this, quantityButton.getNumber()+" "+ currentFood.getName()+" added to your Cart", Toast.LENGTH_SHORT).show();
