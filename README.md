@@ -6,7 +6,7 @@ Android Development Version 1
 |Keith Maher     | 20074612 |
 
 * This app was developed for Mobile Application module in Waterford Institute of Technology.
-* My main goal for this version of the app was to get a cart and menu system up and running.
+* My main goal for this version of the app was to get a order and menu system up and running.
 * The user inputs a name, number and delivery address upon completition of an order.
 * V2 will hopefully include option for Delivery or Collection and linking tables wit a sub menu of sides/pizza's and other menu options.
 
@@ -25,7 +25,7 @@ Android Development Version 1
 # Persistence
 * The persistance within this app is Firebase realtime storage.
 * The menu is stored in a JSON within Firebase and read into the App.
-* Adding to cart created an order object in the firebase and when the order request is
+* Adding to order created an order object in the firebase and when the order request is
 * finally submitted to Firebase that order object is then delete.
 
 # References

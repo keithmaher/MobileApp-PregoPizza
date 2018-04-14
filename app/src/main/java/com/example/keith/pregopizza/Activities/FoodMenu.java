@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.keith.pregopizza.Activities.Interface.ItemClickListener;
@@ -30,6 +31,8 @@ import com.example.keith.pregopizza.R;
 import com.squareup.picasso.Picasso;
 
 public class FoodMenu extends Navigation{
+
+    TextView nav_name;
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
@@ -58,6 +61,7 @@ public class FoodMenu extends Navigation{
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
         loadListFood();
 
 

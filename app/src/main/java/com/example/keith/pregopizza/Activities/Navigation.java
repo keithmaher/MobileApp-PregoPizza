@@ -1,6 +1,7 @@
 package com.example.keith.pregopizza.Activities;
 
 import android.content.Intent;
+import android.hardware.camera2.params.BlackLevelPattern;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.keith.pregopizza.Activities.Sessions.Storage;
 import com.example.keith.pregopizza.R;
@@ -22,6 +25,8 @@ public class Navigation extends Main implements NavigationView.OnNavigationItemS
 
     DrawerLayout drawer;
     NavigationView navigationView;
+    TextView nav_name;
+    TextView nav_email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,14 +35,26 @@ public class Navigation extends Main implements NavigationView.OnNavigationItemS
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View userView = navigationView.getHeaderView(0);
+
+        nav_name = userView.findViewById(R.id.nav_name);
+        nav_email = userView.findViewById(R.id.nav_email);
+
+        String username = Storage.currentCustomer.getName();
+        String useremail = Storage.currentCustomer.getEmail();
+        nav_name.setText(username);
+        nav_email.setText(useremail);
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -54,7 +71,6 @@ public class Navigation extends Main implements NavigationView.OnNavigationItemS
             Storage.currentCustomer = null;
             startActivity(new Intent(this, Main.class));
         }
-
 
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

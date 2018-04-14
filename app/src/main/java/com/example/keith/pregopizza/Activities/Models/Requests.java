@@ -1,14 +1,14 @@
 package com.example.keith.pregopizza.Activities.Models;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Keith on 16/03/2018.
  */
 
 public class Requests {
+    static int count = 1;
+    static int id;
     private String phone;
     private String name;
     private String address;
@@ -18,10 +18,15 @@ public class Requests {
     }
 
     public Requests(String phone, String name, String address, ArrayList<ArrayList<Order>> foods) {
+        id = count ++;
         this.phone = phone;
         this.name = name;
         this.address = address;
         this.foods = foods;
+    }
+
+    public static String getId() {
+        return String.valueOf(id);
     }
 
     public String getPhone() {

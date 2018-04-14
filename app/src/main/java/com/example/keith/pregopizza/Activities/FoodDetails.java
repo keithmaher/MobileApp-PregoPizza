@@ -10,7 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
-import com.example.keith.pregopizza.Activities.Models.MenuM;
+import com.example.keith.pregopizza.Activities.Models.*;
 import com.example.keith.pregopizza.Activities.Models.Order;
 import com.example.keith.pregopizza.Activities.Sessions.Storage;
 import com.example.keith.pregopizza.R;
@@ -20,8 +20,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 public class FoodDetails extends AppCompatActivity {
 
@@ -34,7 +32,7 @@ public class FoodDetails extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference foods;
-    DatabaseReference orders;
+    DatabaseReference carts;
 
     MenuM currentFood;
 
@@ -46,7 +44,7 @@ public class FoodDetails extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         foods = database.getReference("menu");
 
-        orders = database.getReference("orders");
+        carts = database.getReference("carts");
 
         quantityButton = findViewById(R.id.number_button);
         cartButton = findViewById(R.id.cartButton);
@@ -85,11 +83,11 @@ public class FoodDetails extends AppCompatActivity {
         if (Storage.currentCustomer == null){
             Toast.makeText(this, "No one logged in", Toast.LENGTH_SHORT).show();
         }else {
-            orders.child(Storage.currentCustomer.getPhoneNumber()).child(id).setValue(order);
+            carts.child(Storage.currentCustomer.getPhoneNumber()).child(id).setValue(order);
         }
         Intent back = new Intent(FoodDetails.this, FoodMenu.class);
         startActivity(back);
-        Toast.makeText(this, quantityButton.getNumber()+" "+ currentFood.getName()+" added to your Cart", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, quantityButton.getNumber()+" "+ currentFood.getName()+" added to your Order", Toast.LENGTH_SHORT).show();
         finish();
     }
 

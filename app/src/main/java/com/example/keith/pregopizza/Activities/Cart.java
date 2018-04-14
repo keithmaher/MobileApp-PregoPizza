@@ -2,22 +2,16 @@ package com.example.keith.pregopizza.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,8 +39,8 @@ public class Cart extends Navigation{
     RecyclerView.LayoutManager layoutManager;
 
     FirebaseDatabase database;
+    DatabaseReference carts;
     DatabaseReference orders;
-    DatabaseReference request;
 
     TextView txtTotalPrice;
     Button placeOrder;
@@ -74,15 +68,15 @@ public class Cart extends Navigation{
         setSupportActionBar(toolbar);
 
         database = FirebaseDatabase.getInstance();
-        orders = database.getReference("orders");
+        carts = database.getReference("carts");
         if (Storage.currentCustomer == null){
             Toast.makeText(this, "No one logged in", Toast.LENGTH_SHORT).show();
         }else{
             String user = Storage.currentCustomer.getPhoneNumber();
-            orders = orders.child(user);
+            carts = carts.child(user);
         }
 
-        request = database.getReference("requests");
+        orders = database.getReference("orders");
 
         recyclerView = findViewById(R.id.listCart);
         recyclerView.setHasFixedSize(true);
@@ -141,7 +135,7 @@ public class Cart extends Navigation{
 //
 //                      //Log.i("Message", "" + order1);
 //
-//                    Toast.makeText(Cart.this, ""+newOrder.toString(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(Order.this, ""+newOrder.toString(), Toast.LENGTH_SHORT).show();
 //                }
 //            }
 //
@@ -160,7 +154,7 @@ public class Cart extends Navigation{
             @Override
             public void onClick(View v) {
                 if (recyclerView.getChildCount() == 0) {
-                    Toast.makeText(Cart.this, "Nothing in your Cart", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Cart.this, "Nothing in your Order", Toast.LENGTH_SHORT).show();
                 } else {
                     checkoutDialog();
                 }
@@ -201,8 +195,9 @@ public class Cart extends Navigation{
 //                    newOrder.add(order1);
 
                     Requests requests = new Requests(Phone, Name, Address, newOrder);
-                    request.child(String.valueOf(System.currentTimeMillis())).setValue(requests);
-                    orders.getRef().removeValue();
+                    String id = Requests.getId();
+                    orders.child(Storage.currentCustomer.getPhoneNumber()).child(id).setValue(requests);
+                    carts.getRef().removeValue();
                     txtTotalPrice.setText("0");
                     dialog.dismiss();
                     Toast.makeText(Cart.this, "Thank you " + Name + " your order has been recieved and will be delivered to " +Address, Toast.LENGTH_LONG).show();
@@ -225,7 +220,7 @@ public class Cart extends Navigation{
         adapter = new FirebaseRecyclerAdapter<Order, CartViewHolder>(Order.class,
                 R.layout.cart_layout,
                 CartViewHolder.class,
-                orders)
+                carts)
 
         {
 
@@ -243,7 +238,7 @@ public class Cart extends Navigation{
                 viewHolder.txt_cart_name.setText(model.getProductName());
 
 
-                orders.addListenerForSingleValueEvent(new ValueEventListener() {
+                carts.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
