@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.keith.pregopizza.Activities.Interface.ItemClickListener;
 import com.example.keith.pregopizza.Activities.Models.MenuM;
+import com.example.keith.pregopizza.Activities.Sessions.Storage;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -58,6 +59,13 @@ public class FoodMenu extends Navigation{
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         loadListFood();
+
+
+        if (Storage.currentCustomer == null){
+            Toast.makeText(this, "No one logged in", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this, "" + Storage.currentCustomer.getName(), Toast.LENGTH_SHORT).show();
+        }
 
     }
 
