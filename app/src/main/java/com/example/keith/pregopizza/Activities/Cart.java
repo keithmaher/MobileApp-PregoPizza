@@ -31,6 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,20 +90,26 @@ public class Cart extends Navigation{
         txtTotalPrice = findViewById(R.id.total);
         placeOrder = findViewById(R.id.placeOrder);
 
-
-
-
         loadListFoods();
-
 
         carts.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
 
+                Double rtotal = 0.0;
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                     Order order = userSnapshot.getValue(Order.class);
                     cart.add(order);
+
+                    double runprice = Double.parseDouble(order.getPrice());
+                    double runquant = Double.parseDouble(order.getQuantity());
+                    double runrun = runprice * runquant;
+                    rtotal = rtotal + runrun;
+
+
                 }
+                DecimalFormat number = new DecimalFormat("#0.00");
+                txtTotalPrice.setText(String.valueOf(number.format(rtotal)));
             }
 
             @Override
@@ -143,7 +150,6 @@ public class Cart extends Navigation{
         final String name = cart_name.getText().toString();
         final String phone = cart_number.getText().toString();
 
-
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,7 +167,6 @@ public class Cart extends Navigation{
                 }
             }
         });
-
 
         noButton.setOnClickListener(new View.OnClickListener() {
             @Override
