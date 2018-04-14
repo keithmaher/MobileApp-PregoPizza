@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.keith.pregopizza.Activities.Sessions.Storage;
 import com.example.keith.pregopizza.R;
 
 public class Navigation extends Main implements NavigationView.OnNavigationItemSelectedListener {
@@ -50,7 +51,8 @@ public class Navigation extends Main implements NavigationView.OnNavigationItemS
         } else if (id == R.id.nav_login) {
             loginDialog();
         } else if (id == R.id.nav_logout) {
-            registerDialog();
+            Storage.currentCustomer = null;
+            startActivity(new Intent(this, Main.class));
         }
 
 
