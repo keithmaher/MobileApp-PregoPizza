@@ -17,9 +17,9 @@ import android.view.MenuItem;
 
 import com.example.keith.pregopizza.R;
 
-public class Navigation extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Navigation extends Main implements NavigationView.OnNavigationItemSelectedListener {
+
     DrawerLayout drawer;
-    FloatingActionButton fab;
     NavigationView navigationView;
 
     @Override
@@ -29,7 +29,6 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -48,6 +47,10 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
             startAnimatedActivity(new Intent(getApplicationContext(), FoodMenu.class));
         } else if (id == R.id.nav_gallery) {
             startAnimatedActivity(new Intent(getApplicationContext(), Cart.class));
+        } else if (id == R.id.nav_login) {
+            loginDialog();
+        } else if (id == R.id.nav_logout) {
+            registerDialog();
         }
 
 

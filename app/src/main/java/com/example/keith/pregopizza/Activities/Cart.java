@@ -155,14 +155,14 @@ public class Cart extends Navigation{
                 if (recyclerView.getChildCount() == 0) {
                     Toast.makeText(Cart.this, "Nothing in your Cart", Toast.LENGTH_SHORT).show();
                 } else {
-                    showAlertDialog();
+                    checkoutDialog();
                 }
             }
         });
 
     }
 
-    private void showAlertDialog() {
+    private void checkoutDialog() {
 
         alertDialog = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.dialog, null);
