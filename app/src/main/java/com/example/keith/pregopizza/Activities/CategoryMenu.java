@@ -4,42 +4,36 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.keith.pregopizza.Activities.Interface.ItemClickListener;
-import com.example.keith.pregopizza.Activities.Models.MenuM;
-import com.example.keith.pregopizza.Activities.Sessions.Storage;
+import com.example.keith.pregopizza.Activities.Models.Category;
+import com.example.keith.pregopizza.Activities.ViewHolder.CategoryViewHolder;
+import com.example.keith.pregopizza.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.example.keith.pregopizza.Activities.ViewHolder.MenuViewHolder;
-import com.example.keith.pregopizza.R;
 import com.squareup.picasso.Picasso;
 
-public class FoodMenu extends Navigation{
-
-    RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
+public class CategoryMenu extends Navigation {
 
     FirebaseDatabase database;
-    DatabaseReference foodMenuList;
-    FirebaseRecyclerAdapter<MenuM, MenuViewHolder> adapter;
+    DatabaseReference category;
+    FirebaseRecyclerAdapter<Category,CategoryViewHolder> adapter;
 
-    String categoryId = "";
+    RecyclerView recycler_menu;
+    RecyclerView.LayoutManager layoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +41,7 @@ public class FoodMenu extends Navigation{
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //inflate your activity layout here!
         @SuppressLint("InflateParams")
-        View contentView = inflater.inflate(R.layout.activity_menu, null, false);
+        View contentView = inflater.inflate(R.layout.activity_category_menu, null, false);
         drawer.addView(contentView, 0);
         navigationView.setCheckedItem(R.id.nav_camera);
 
@@ -55,26 +49,14 @@ public class FoodMenu extends Navigation{
         setSupportActionBar(toolbar);
 
         database = FirebaseDatabase.getInstance();
-        foodMenuList = database.getReference("menu");
+        category = database.getReference("category");
 
-        recyclerView = findViewById(R.id.recycler_food);
-        recyclerView.setHasFixedSize(true);
+        recycler_menu = findViewById(R.id.recycler_category_menu);
+        recycler_menu.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
+        recycler_menu.setLayoutManager(layoutManager);
 
-        if (getIntent() != null){
-            categoryId = getIntent().getStringExtra("categoryId");
-            if (categoryId != null){
-                loadListFood();
-            }
-        }
-
-        if (Storage.currentCustomer == null){
-            Toast.makeText(this, "No one logged in", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(this, "" + Storage.currentCustomer.getName(), Toast.LENGTH_SHORT).show();
-        }
-
+        loadMenu();
     }
 
     @Override
@@ -83,34 +65,34 @@ public class FoodMenu extends Navigation{
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            startActivity(new Intent(this, CategoryMenu.class));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                finishAffinity();
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 
+    private void loadMenu() {
 
-    private void loadListFood() {
-
-        adapter = new FirebaseRecyclerAdapter<MenuM, MenuViewHolder>(MenuM.class, R.layout.menu_row, MenuViewHolder.class, foodMenuList.orderByChild("menuId").equalTo(categoryId))
-
-        {
+        adapter = new FirebaseRecyclerAdapter<Category, CategoryViewHolder>(Category.class,R.layout.category_row,CategoryViewHolder.class,category) {
             @Override
-            protected void populateViewHolder(MenuViewHolder viewHolder, MenuM model, int position) {
-                viewHolder.MenuName.setText(model.getName());
+            protected void populateViewHolder(CategoryViewHolder viewHolder, Category model, int position) {
+                viewHolder.menuNameText.setText(model.getName());
                 Picasso.with(getBaseContext()).load(model.getImage()).into(viewHolder.ImageView);
-
-                final MenuM local = model;
+                final Category clickItem = model;
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                        Intent foodDetails = new Intent(FoodMenu.this, FoodDetails.class);
-                        foodDetails.putExtra("menuId", adapter.getRef(position).getKey());
-                        startActivity(foodDetails);
+                        Intent MenuList = new Intent(CategoryMenu.this, FoodMenu.class);
+                        MenuList.putExtra("categoryId",adapter.getRef(position).getKey());
+                        startActivity(MenuList);
+                        finish();
                     }
                 });
             }
         };
-
-        recyclerView.setAdapter(adapter);
+        recycler_menu.setAdapter(adapter);
     }
 
 }

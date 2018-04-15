@@ -106,7 +106,6 @@ public class Cart extends Navigation{
                     double runrun = runprice * runquant;
                     rtotal = rtotal + runrun;
 
-
                 }
                 DecimalFormat number = new DecimalFormat("#0.00");
                 txtTotalPrice.setText(String.valueOf(number.format(rtotal)));
@@ -193,35 +192,6 @@ public class Cart extends Navigation{
                 String runtotal = String.valueOf(total);
                 viewHolder.txt_cart_price.setText(runtotal);
                 viewHolder.txt_cart_name.setText(model.getProductName());
-
-
-//                carts.addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(DataSnapshot dataSnapshot) {
-//
-////////////////////////////////////////////////////////////////////////////////////////////
-//                        /////////////////////////////////////////////////////////////////
-//
-//                        //    THIS SECTION IS NOT WORKING.
-//                        //    TRYING TO CREATE A RUNNING TOTAL OF ALL ITEMS IN ORDERS.
-//
-//                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                            Order order = snapshot.getValue(Order.class);
-//                            double runprice = Double.parseDouble(order.getPrice());
-//                            double runquant = Double.parseDouble(order.getQuantity());
-//                            String rtotal = "";
-//                            rtotal = String.valueOf(rtotal+runprice*runquant);
-//                            txtTotalPrice.setText(rtotal);
-//                        }
-//                    }
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//                    }
-//                });
-
-/////////////////////////////////////////////////////////////////////////////////////////
-                ////////////////////////////////////////////////////////////////////////
-
             }
 
         };

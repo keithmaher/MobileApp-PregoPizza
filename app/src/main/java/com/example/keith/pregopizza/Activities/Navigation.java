@@ -74,7 +74,7 @@ public class Navigation extends Main implements NavigationView.OnNavigationItemS
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.nav_camera) {
-            startAnimatedActivity(new Intent(getApplicationContext(), FoodMenu.class));
+            startAnimatedActivity(new Intent(getApplicationContext(), CategoryMenu.class));
         } else if (id == R.id.nav_gallery) {
             startAnimatedActivity(new Intent(getApplicationContext(), Cart.class));
         } else if (id == R.id.nav_login) {

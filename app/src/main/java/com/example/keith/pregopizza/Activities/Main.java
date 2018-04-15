@@ -52,7 +52,7 @@ public class Main extends AppCompatActivity {
         mainMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Main.this, FoodMenu.class));
+                startActivity(new Intent(Main.this, CategoryMenu.class));
             }
         });
 
@@ -85,7 +85,7 @@ public class Main extends AppCompatActivity {
                         if (dataSnapshot.child(phoneNumber).exists()) {
                             Customer customer = dataSnapshot.child(phoneNumber).getValue(Customer.class);
                             if (customer.getPassword().equals(password)) {
-                                Intent menu = new Intent(Main.this, FoodMenu.class);
+                                Intent menu = new Intent(Main.this, CategoryMenu.class);
                                 Storage.currentCustomer = customer;
                                 startActivity(menu);
                                 dialog.dismiss();

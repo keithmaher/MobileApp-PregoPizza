@@ -86,7 +86,7 @@ public class FoodDetails extends AppCompatActivity {
             carts.child(Storage.currentCustomer.getPhoneNumber()).child(id).setValue(order);
             Toast.makeText(this, quantityButton.getNumber() + " " + currentFood.getName() + " added to your Order", Toast.LENGTH_SHORT).show();
         }
-        Intent back = new Intent(FoodDetails.this, FoodMenu.class);
+        Intent back = new Intent(FoodDetails.this, CategoryMenu.class);
         startActivity(back);
         finish();
     }
