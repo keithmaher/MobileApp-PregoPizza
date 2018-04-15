@@ -2,6 +2,7 @@ package com.example.keith.pregopizza.Activities;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -23,8 +24,8 @@ public class SplashScreen extends AppCompatActivity
 
         EasySplashScreen config = new EasySplashScreen(SplashScreen.this)
                 .withFullScreen()
-                .withTargetActivity(Main.class)
-                .withSplashTimeOut(700)
+                .withTargetActivity(CategoryMenu.class)
+                .withSplashTimeOut(1500)
                 .withBackgroundColor(Color.parseColor("#ffffff"))
                 .withLogo(R.drawable.prego);
 

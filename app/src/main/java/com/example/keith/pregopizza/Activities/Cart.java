@@ -69,7 +69,7 @@ public class Cart extends Navigation{
         navigationView.setCheckedItem(R.id.nav_gallery);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
 
         database = FirebaseDatabase.getInstance();
         carts = database.getReference("carts");

@@ -45,14 +45,14 @@ public class FoodMenu extends Navigation{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //inflate your activity layout here!
+
         @SuppressLint("InflateParams")
         View contentView = inflater.inflate(R.layout.activity_menu, null, false);
         drawer.addView(contentView, 0);
         navigationView.setCheckedItem(R.id.nav_camera);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
 
         database = FirebaseDatabase.getInstance();
         foodMenuList = database.getReference("menu");

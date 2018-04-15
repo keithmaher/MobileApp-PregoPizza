@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="25dp">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <fragment
+        android:id="@+id/contact_map_fragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="202dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
+    <TextView
+        android:id="@+id/contact_address_title"
+        android:layout_width="141dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Address"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contact_map_fragment" />
+
+    <TextView
+        android:id="@+id/contact_address"
+        android:layout_width="265dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="8dp"
+        android:text="Cresent Shop, Clonmel, Co. Tipperary"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contact_address_title" />
+
+    <ImageView
+        android:id="@+id/contact_address_image"
+        android:layout_width="57dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/contact_address"
+        app:layout_constraintStart_toEndOf="@+id/contact_address"
+        app:layout_constraintTop_toTopOf="@+id/contact_address"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_maps" />
+
+    <TextView
+        android:id="@+id/contact_phone_title"
+        android:layout_width="141dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:text="Phone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contact_address" />
+
+    <TextView
+        android:id="@+id/contact_phone"
+        android:layout_width="265dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:text="052123456"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contact_phone_title" />
+
+    <ImageView
+        android:id="@+id/contact_phone_image"
+        android:layout_width="57dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/contact_phone"
+        app:layout_constraintStart_toEndOf="@+id/contact_phone"
+        app:layout_constraintTop_toTopOf="@+id/contact_phone"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_phone" />
+
+    <TextView
+        android:id="@+id/contact_mail_title"
+        android:layout_width="141dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:text="Email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contact_phone" />
+
+    <TextView
+        android:id="@+id/contact_mail"
+        android:layout_width="265dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="8dp"
+        android:text="damian@prego.ie"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contact_mail_title" />
+
+    <ImageView
+        android:id="@+id/contact_mail_image"
+        android:layout_width="57dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/contact_mail"
+        app:layout_constraintStart_toEndOf="@+id/contact_mail"
+        app:layout_constraintTop_toTopOf="@+id/contact_mail"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_email" />
+
+
+</android.support.constraint.ConstraintLayout>
