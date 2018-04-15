@@ -49,10 +49,10 @@ public class FoodMenu extends Navigation{
         @SuppressLint("InflateParams")
         View contentView = inflater.inflate(R.layout.activity_menu, null, false);
         drawer.addView(contentView, 0);
-        navigationView.setCheckedItem(R.id.nav_camera);
+        navigationView.setCheckedItem(R.id.nav_menu);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
 
         database = FirebaseDatabase.getInstance();
         foodMenuList = database.getReference("menu");

@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.keith.pregopizza.Activities.Models.Category;
 import com.example.keith.pregopizza.Activities.Models.Customer;
 import com.example.keith.pregopizza.Activities.Sessions.Storage;
 import com.example.keith.pregopizza.R;
@@ -82,7 +83,7 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
             nav_name.setText("You need to login");
             nav_email.setText("to view more options");
             nav_Menu.findItem(R.id.nav_logout).setVisible(false);
-            nav_Menu.findItem(R.id.nav_gallery).setVisible(false);
+            nav_Menu.findItem(R.id.nav_cart).setVisible(false);
             nav_Menu.findItem(R.id.nav_profile).setVisible(false);
             nav_Menu.findItem(R.id.nav_orders).setVisible(false);
         }else {
@@ -101,19 +102,20 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.nav_camera) {
+
+        if (id == R.id.nav_menu) {
             startAnimatedActivity(new Intent(getApplicationContext(), CategoryMenu.class));
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_cart) {
             startAnimatedActivity(new Intent(getApplicationContext(), Cart.class));
+        } else if (id == R.id.nav_location) {
+            startAnimatedActivity(new Intent(getApplicationContext(), Contact.class));
         } else if (id == R.id.nav_login) {
             loginDialog();
         } else if (id == R.id.nav_logout) {
             Storage.currentCustomer = null;
-            startActivity(new Intent(this, Main.class));
+            finish();
         } else if (id == R.id.nav_register) {
             registerDialog();
-        } else if (id == R.id.nav_location) {
-            startActivity(new Intent(this, Contact.class));
         }
 
 

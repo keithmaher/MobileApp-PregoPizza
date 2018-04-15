@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:layout_editor_absoluteY="25dp">
+    tools:context="com.example.keith.pregopizza.Activities.Contact">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -112,7 +112,7 @@
     <TextView
         android:id="@+id/contact_mail"
         android:layout_width="265dp"
-        android:layout_height="47dp"
+        android:layout_height="35dp"
         android:layout_marginStart="8dp"
         android:text="damian@prego.ie"
         android:textSize="22sp"
@@ -123,7 +123,7 @@
         android:id="@+id/contact_mail_image"
         android:layout_width="57dp"
         android:layout_height="47dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/contact_mail"
         app:layout_constraintStart_toEndOf="@+id/contact_mail"

@@ -66,10 +66,10 @@ public class Cart extends Navigation{
         @SuppressLint("InflateParams")
         View contentView = inflater.inflate(R.layout.activity_cart, null, false);
         drawer.addView(contentView, 0);
-        navigationView.setCheckedItem(R.id.nav_gallery);
+        navigationView.setCheckedItem(R.id.nav_cart);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
 
         database = FirebaseDatabase.getInstance();
         carts = database.getReference("carts");

@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.example.keith.pregopizza.Manifest;
 import com.example.keith.pregopizza.R;
@@ -27,19 +29,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Contact extends Navigation implements OnMapReadyCallback {
 
+    ImageView contact_phone_image;
 
-    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-          //setContentView(R.layout.activity_contact);
-
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         @SuppressLint("InflateParams")
         View contentView = inflater.inflate(R.layout.activity_contact, null, false);
         drawer.addView(contentView, 0);
-
         navigationView.setCheckedItem(R.id.nav_location);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -48,10 +47,24 @@ public class Contact extends Navigation implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.contact_map_fragment);
         mapFragment.getMapAsync(this);
 
-//        Intent callIntent = new Intent(Intent.ACTION_CALL);
-//        callIntent.setData(Uri.parse("tel:123456789"));
-//        startActivity(callIntent);
+        contact_phone_image = findViewById(R.id.contact_phone_image);
 
+        contact_phone_image.setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View v) {
+
+                Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:052123456"));
+                if (ActivityCompat.checkSelfPermission(Contact.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+                    ActivityCompat.requestPermissions(Contact.this, new String[]{android.Manifest.permission.CALL_PHONE}, PackageManager.PERMISSION_GRANTED);
+
+                } else {
+                    startActivity(callIntent);
+                }
+            }
+            });
 
     }
 
@@ -60,7 +73,7 @@ public class Contact extends Navigation implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
 
         LatLng prego = new LatLng(52.356853, -7.697648);
-        googleMap.addMarker(new MarkerOptions().position(prego).title("Prego Pizza Clonmel"));
+        googleMap.addMarker(new MarkerOptions().position(prego).title("Prego Pizza Clonmel")).showInfoWindow();
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(prego, 15));
     }
 
