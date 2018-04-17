@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,9 @@ import com.google.firebase.database.ValueEventListener;
 
 public class Navigation extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    String newUserPhone;
+    String newUserPassword;
+
     DrawerLayout drawer;
     NavigationView navigationView;
     TextView nav_name;
@@ -42,15 +46,15 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
     AlertDialog dialog;
     Button loginbutton;
     Button loginCancelButton;
-    TextView loginPhoneNumber;
-    TextView loginPassword;
+    EditText loginPhoneNumber;
+    EditText loginPassword;
 
     Button registerButton;
     Button registerCancelButton;
-    TextView registerName;
-    TextView registerPhoneNumber;
-    TextView registerEmail;
-    TextView registerPassword;
+    EditText registerName;
+    EditText registerPhoneNumber;
+    EditText registerEmail;
+    EditText registerPassword;
 
     FirebaseDatabase database;
     DatabaseReference customers;
@@ -105,19 +109,23 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
 
         if (id == R.id.nav_menu) {
             startAnimatedActivity(new Intent(getApplicationContext(), CategoryMenu.class));
+            finish();
         } else if (id == R.id.nav_cart) {
             startAnimatedActivity(new Intent(getApplicationContext(), Cart.class));
+            finish();
         } else if (id == R.id.nav_location) {
             startAnimatedActivity(new Intent(getApplicationContext(), Contact.class));
+            finish();
         } else if (id == R.id.nav_login) {
             loginDialog();
         } else if (id == R.id.nav_logout) {
             Storage.currentCustomer = null;
-            finish();
+            Intent logout = new Intent(getApplicationContext(), CategoryMenu.class);
+            logout.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(logout);
         } else if (id == R.id.nav_register) {
             registerDialog();
         }
-
 
         drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -141,11 +149,22 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
         dialog = alertDialog.create();
         dialog.show();
 
+        if (newUserPhone != null) {
+
+            loginPhoneNumber.setText(newUserPhone);
+            loginPassword.setText(newUserPassword);
+        }
+
+
 
         loginbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String phoneNumber =  loginPhoneNumber.getText().toString();
+
+                newUserPhone = null;
+                newUserPassword = null;
+
+                final String phoneNumber = loginPhoneNumber.getText().toString();
                 final String password = loginPassword.getText().toString();
 
                 customers.addValueEventListener(new ValueEventListener() {
@@ -159,6 +178,7 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
                                 Storage.currentCustomer = customer;
                                 startActivity(menu);
                                 dialog.dismiss();
+                                finish();
                             } else {
                                 Toast.makeText(Navigation.this, "Wrong Password", Toast.LENGTH_SHORT).show();
                             }
@@ -172,8 +192,6 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
 
                     }
                 });
-
-
             }
         });
 
@@ -190,6 +208,7 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
 
     public void registerDialog() {
 
+        Storage.currentCustomer = null;
         alertDialog = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.register, null);
         registerButton = view.findViewById(R.id.registerButton);
@@ -206,6 +225,7 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 final String name =  registerName.getText().toString();
                 final String phoneNumber = registerPhoneNumber.getText().toString();
                 final String email = registerEmail.getText().toString();
@@ -221,8 +241,13 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
                         } else {
                             Customer customer = new Customer(name, phoneNumber, email, password);
                             customers.child(phoneNumber).setValue(customer);
+
+                            newUserPhone = phoneNumber;
+                            newUserPassword = password;
+
                             Toast.makeText(Navigation.this, "Thank you " + name + " for registering", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
+                            loginDialog();
                         }
                     }
 

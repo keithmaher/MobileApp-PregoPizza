@@ -22,6 +22,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.UUID;
+
 public class FoodDetails extends AppCompatActivity {
 
     TextView food_name, food_price, food_descriprion;
@@ -80,11 +82,11 @@ public class FoodDetails extends AppCompatActivity {
 
 
         Order order = new Order(menuId, currentFood.getName(), quantityButton.getNumber(), currentFood.getPrice());
-        String id = Order.getId();
+        String uniqueID = UUID.randomUUID().toString();
         if (Storage.currentCustomer == null){
             Toast.makeText(this, "No one logged in", Toast.LENGTH_SHORT).show();
         }else {
-            carts.child(Storage.currentCustomer.getPhoneNumber()).child(id).setValue(order);
+            carts.child(Storage.currentCustomer.getPhoneNumber()).child(uniqueID).setValue(order);
             Toast.makeText(this, quantityButton.getNumber() + " " + currentFood.getName() + " added to your Order", Toast.LENGTH_SHORT).show();
         }
         Intent back = new Intent(FoodDetails.this, CategoryMenu.class);

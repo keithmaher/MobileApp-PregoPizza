@@ -34,6 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Cart extends Navigation{
 
@@ -157,8 +158,8 @@ public class Cart extends Navigation{
                     Toast.makeText(Cart.this, "Make sure details are all filled correctly!", Toast.LENGTH_SHORT).show();
                 }else {
                     Requests requests = new Requests(phone, name, address, cart);
-                    String id = Requests.getId();
-                    orders.child(Storage.currentCustomer.getPhoneNumber()).child(id).setValue(requests);
+                    String uniqueID = UUID.randomUUID().toString();
+                    orders.child(Storage.currentCustomer.getPhoneNumber()).child(uniqueID).setValue(requests);
                     carts.getRef().removeValue();
                     txtTotalPrice.setText("0");
                     dialog.dismiss();

@@ -43,6 +43,14 @@
                     android:id="@+id/nav_profile"
                     android:icon="@drawable/ic_profile"
                     android:title="My Profile" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Settings">
+        <menu>
+            <group
+                android:id="@+id/group3">
                 <item
                     android:id="@+id/nav_login"
                     android:icon="@drawable/ic_login"
@@ -55,7 +63,6 @@
                     android:id="@+id/nav_register"
                     android:icon="@drawable/ic_register"
                     android:title="Register" />
-
             </group>
         </menu>
     </item>
