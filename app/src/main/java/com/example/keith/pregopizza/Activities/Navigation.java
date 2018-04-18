@@ -116,6 +116,9 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
         } else if (id == R.id.nav_location) {
             startAnimatedActivity(new Intent(getApplicationContext(), Contact.class));
             finish();
+        } else if (id == R.id.nav_profile) {
+            startAnimatedActivity(new Intent(getApplicationContext(), Profile.class));
+            finish();
         } else if (id == R.id.nav_login) {
             loginDialog();
         } else if (id == R.id.nav_logout) {

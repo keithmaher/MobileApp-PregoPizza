@@ -3,14 +3,17 @@ package com.example.keith.pregopizza.Activities;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -33,8 +36,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
+
+import static java.lang.System.currentTimeMillis;
 
 public class Cart extends Navigation{
 
@@ -151,6 +159,7 @@ public class Cart extends Navigation{
         final String phone = cart_number.getText().toString();
 
         yesButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
                 String address =  cart_address.getText().toString();
@@ -158,8 +167,14 @@ public class Cart extends Navigation{
                     Toast.makeText(Cart.this, "Make sure details are all filled correctly!", Toast.LENGTH_SHORT).show();
                 }else {
                     Requests requests = new Requests(phone, name, address, cart);
-                    String uniqueID = UUID.randomUUID().toString();
-                    orders.child(Storage.currentCustomer.getPhoneNumber()).child(uniqueID).setValue(requests);
+
+//                    Calendar c = Calendar.getInstance();
+//                    SimpleDateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
+//                    String formattedDate = df.format(c.getTime());
+
+                    String timeStamp = String.valueOf(System.currentTimeMillis());
+
+                    orders.child(Storage.currentCustomer.getPhoneNumber()).child(timeStamp).setValue(requests);
                     carts.getRef().removeValue();
                     txtTotalPrice.setText("0");
                     dialog.dismiss();
