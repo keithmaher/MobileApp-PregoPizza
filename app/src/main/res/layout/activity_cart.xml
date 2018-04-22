@@ -54,6 +54,8 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:background="@android:color/holo_green_light"
+                android:textColor="@color/colorText"
                 android:text="@string/place_order"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

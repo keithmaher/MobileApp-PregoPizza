@@ -41,6 +41,7 @@
         android:layout_marginStart="16dp"
         android:background="@color/colorPrimary"
         android:padding="10dp"
+        android:textColor="@color/colorText"
         android:text="Change Image"
         app:layout_constraintBottom_toBottomOf="@+id/imageView2"
         app:layout_constraintStart_toEndOf="@+id/imageView2" />
@@ -60,7 +61,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileImageButton" />
 
-    <EditText
+    <TextView
         android:id="@+id/profilePhoneNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -127,8 +128,9 @@
         android:layout_width="146dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@color/colorPrimary"
+        android:background="@android:color/holo_green_light"
         android:padding="10dp"
+        android:textColor="@color/colorText"
         android:text="Save Details"
         app:layout_constraintEnd_toEndOf="@+id/profilePassword"
         app:layout_constraintTop_toBottomOf="@+id/profilePassword" />

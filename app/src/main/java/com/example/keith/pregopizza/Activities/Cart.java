@@ -2,6 +2,7 @@ package com.example.keith.pregopizza.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
@@ -46,6 +47,8 @@ import static java.lang.System.currentTimeMillis;
 
 public class Cart extends Navigation{
 
+    SharedPreferences settings;
+
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
 
@@ -77,17 +80,16 @@ public class Cart extends Navigation{
         drawer.addView(contentView, 0);
         navigationView.setCheckedItem(R.id.nav_cart);
 
+        settings = getSharedPreferences("loginSettings", 0);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         database = FirebaseDatabase.getInstance();
         carts = database.getReference("carts");
-        if (Storage.currentCustomer == null){
-            Toast.makeText(this, "No one logged in", Toast.LENGTH_SHORT).show();
-        }else{
-            String user = Storage.currentCustomer.getPhoneNumber();
-            carts = carts.child(user);
-        }
+
+        String user = settings.getString("userphone", null);
+        carts = carts.child(user);
 
         orders = database.getReference("orders");
 
@@ -130,7 +132,7 @@ public class Cart extends Navigation{
             @Override
             public void onClick(View v) {
                 if (recyclerView.getChildCount() == 0) {
-                    Toast.makeText(Cart.this, "Nothing in your Order", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Cart.this, "Nothing in your Cart", Toast.LENGTH_SHORT).show();
                 } else {
                     checkoutDialog();
                 }
@@ -152,8 +154,8 @@ public class Cart extends Navigation{
         dialog = alertDialog.create();
         dialog.show();
 
-        cart_name.setText(Storage.currentCustomer.getName());
-        cart_number.setText(Storage.currentCustomer.getPhoneNumber());
+        cart_name.setText(settings.getString("username", null));
+        cart_number.setText(settings.getString("userphone", null));
 
         final String name = cart_name.getText().toString();
         final String phone = cart_number.getText().toString();
@@ -167,10 +169,6 @@ public class Cart extends Navigation{
                     Toast.makeText(Cart.this, "Make sure details are all filled correctly!", Toast.LENGTH_SHORT).show();
                 }else {
                     Requests requests = new Requests(phone, name, address, cart);
-
-//                    Calendar c = Calendar.getInstance();
-//                    SimpleDateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
-//                    String formattedDate = df.format(c.getTime());
 
                     String timeStamp = String.valueOf(System.currentTimeMillis());
 

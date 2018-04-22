@@ -1,6 +1,7 @@
 package com.example.keith.pregopizza.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
@@ -26,6 +27,8 @@ import java.util.UUID;
 
 public class FoodDetails extends AppCompatActivity {
 
+    SharedPreferences settings;
+
     TextView food_name, food_price, food_descriprion;
     ImageView food_image;
     FloatingActionButton cartButton;
@@ -43,6 +46,8 @@ public class FoodDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_details);
+
+        settings = getSharedPreferences("loginSettings", 0);
 
         database = FirebaseDatabase.getInstance();
         foods = database.getReference("menu");
@@ -83,12 +88,14 @@ public class FoodDetails extends AppCompatActivity {
 
         Order order = new Order(menuId, currentFood.getName(), quantityButton.getNumber(), currentFood.getPrice());
         String uniqueID = UUID.randomUUID().toString();
-        if (Storage.currentCustomer == null){
-            Toast.makeText(this, "No one logged in", Toast.LENGTH_SHORT).show();
+
+        if (!settings.getBoolean("loggedin", false)){
+            Toast.makeText(this, "Please login/Register", Toast.LENGTH_SHORT).show();
         }else {
-            carts.child(Storage.currentCustomer.getPhoneNumber()).child(uniqueID).setValue(order);
-            Toast.makeText(this, quantityButton.getNumber() + " " + currentFood.getName() + " added to your Order", Toast.LENGTH_SHORT).show();
+            carts.child(settings.getString("userphone", null)).child(uniqueID).setValue(order);
+            Toast.makeText(this, quantityButton.getNumber() + " " + currentFood.getName() + " added to your Cart", Toast.LENGTH_SHORT).show();
         }
+
         Intent back = new Intent(FoodDetails.this, CategoryMenu.class);
         startActivity(back);
         finish();

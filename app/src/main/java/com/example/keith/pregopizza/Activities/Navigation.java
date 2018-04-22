@@ -1,6 +1,7 @@
 package com.example.keith.pregopizza.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.camera2.params.BlackLevelPattern;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -34,8 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class Navigation extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    String newUserPhone;
-    String newUserPassword;
+    SharedPreferences settings;
 
     DrawerLayout drawer;
     NavigationView navigationView;
@@ -58,6 +58,7 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
 
     FirebaseDatabase database;
     DatabaseReference customers;
+    DatabaseReference newCustomes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +67,11 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        settings = getSharedPreferences("loginSettings", 0);
+
         database = FirebaseDatabase.getInstance();
         customers = database.getReference("customers");
+        newCustomes = database.getReference("customers");
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -82,8 +86,7 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
         nav_name = userView.findViewById(R.id.nav_name);
         nav_email = userView.findViewById(R.id.nav_email);
 
-        if (Storage.currentCustomer == null){
-            Toast.makeText(this, "No one logged in", Toast.LENGTH_SHORT).show();
+        if (!settings.getBoolean("loggedin", false)){
             nav_name.setText("You need to login");
             nav_email.setText("to view more options");
             nav_Menu.findItem(R.id.nav_logout).setVisible(false);
@@ -92,8 +95,8 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
             nav_Menu.findItem(R.id.nav_orders).setVisible(false);
         }else {
 
-        String username = Storage.currentCustomer.getName();
-        String useremail = Storage.currentCustomer.getEmail();
+        String username = settings.getString("username", null);
+        String useremail = settings.getString("useremail", null);
         nav_name.setText(username);
         nav_email.setText(useremail);
         nav_Menu.findItem(R.id.nav_login).setVisible(false);
@@ -122,10 +125,7 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
         } else if (id == R.id.nav_login) {
             loginDialog();
         } else if (id == R.id.nav_logout) {
-            Storage.currentCustomer = null;
-            Intent logout = new Intent(getApplicationContext(), CategoryMenu.class);
-            logout.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(logout);
+            logout();
         } else if (id == R.id.nav_register) {
             registerDialog();
         }
@@ -134,6 +134,18 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public void logout() {
+        Toast.makeText(Navigation.this, "Thank you come again!", Toast.LENGTH_SHORT).show();
+        SharedPreferences.Editor editor = getSharedPreferences("loginSettings", 0).edit();
+        editor.putBoolean("loggedin", false);
+        editor.commit();
+        Intent logout = new Intent(getApplicationContext(), CategoryMenu.class);
+        logout.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(logout);
+        finish();
+    }
+
 
     protected void startAnimatedActivity(Intent intent) {
         startActivity(intent);
@@ -152,20 +164,10 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
         dialog = alertDialog.create();
         dialog.show();
 
-        if (newUserPhone != null) {
-
-            loginPhoneNumber.setText(newUserPhone);
-            loginPassword.setText(newUserPassword);
-        }
-
-
 
         loginbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                newUserPhone = null;
-                newUserPassword = null;
 
                 final String phoneNumber = loginPhoneNumber.getText().toString();
                 final String password = loginPassword.getText().toString();
@@ -177,8 +179,15 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
                         if (dataSnapshot.child(phoneNumber).exists()) {
                             Customer customer = dataSnapshot.child(phoneNumber).getValue(Customer.class);
                             if (customer.getPassword().equals(password)) {
+                                Toast.makeText(Navigation.this, "Welcome "+customer.getName(), Toast.LENGTH_SHORT).show();
                                 Intent menu = new Intent(Navigation.this, CategoryMenu.class);
-                                Storage.currentCustomer = customer;
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putBoolean("loggedin", true);
+                                editor.putString("username", customer.getName());
+                                editor.putString("userphone", phoneNumber);
+                                editor.putString("useremail", customer.getEmail());
+                                editor.putString("password", password);
+                                editor.commit();
                                 startActivity(menu);
                                 dialog.dismiss();
                                 finish();
@@ -211,7 +220,6 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
 
     public void registerDialog() {
 
-        Storage.currentCustomer = null;
         alertDialog = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.register, null);
         registerButton = view.findViewById(R.id.registerButton);
@@ -234,7 +242,7 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
                 final String email = registerEmail.getText().toString();
                 final String password = registerPassword.getText().toString();
 
-                customers.addValueEventListener(new ValueEventListener() {
+                newCustomes.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (name.isEmpty() || phoneNumber.isEmpty() || email.isEmpty() || password.isEmpty()){
@@ -243,14 +251,18 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
                             Toast.makeText(Navigation.this, "Phone Number Already Registered", Toast.LENGTH_SHORT).show();
                         } else {
                             Customer customer = new Customer(name, phoneNumber, email, password);
-                            customers.child(phoneNumber).setValue(customer);
-
-                            newUserPhone = phoneNumber;
-                            newUserPassword = password;
-
+                            newCustomes.child(phoneNumber).setValue(customer);
+                            SharedPreferences.Editor editor = settings.edit();
+                            editor.putBoolean("loggedin", true);
+                            editor.putString("username", name);
+                            editor.putString("userphone", phoneNumber);
+                            editor.putString("useremail", email);
+                            editor.putString("password", password);
+                            editor.commit();
                             Toast.makeText(Navigation.this, "Thank you " + name + " for registering", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
-                            loginDialog();
+                            Intent login = new Intent(getApplicationContext(), CategoryMenu.class);
+                            startActivity(login);
                         }
                     }
 

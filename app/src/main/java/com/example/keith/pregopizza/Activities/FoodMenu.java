@@ -69,12 +69,6 @@ public class FoodMenu extends Navigation{
             }
         }
 
-        if (Storage.currentCustomer == null){
-            Toast.makeText(this, "No one logged in", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(this, "" + Storage.currentCustomer.getName(), Toast.LENGTH_SHORT).show();
-        }
-
     }
 
     @Override

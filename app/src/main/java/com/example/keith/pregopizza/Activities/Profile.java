@@ -2,6 +2,8 @@ package com.example.keith.pregopizza.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.keith.pregopizza.Activities.Models.Customer;
@@ -22,11 +25,15 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Profile extends Navigation {
 
-    EditText profileName, profilePhoneNumber, profileEmail, profilePassword;
+    SharedPreferences settings;
+
+    EditText profileName, profileEmail, profilePassword;
+    TextView profilePhoneNumber;
     Button changImageButton, profileSaveButton, profileDeleteButton;
 
     FirebaseDatabase database;
     DatabaseReference customer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,39 +48,57 @@ public class Profile extends Navigation {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        settings = getSharedPreferences("loginSettings", 0);
+
+        database = FirebaseDatabase.getInstance();
+        customer = database.getReference("customers");
+
         profileName = findViewById(R.id.profileName);
         profilePhoneNumber = findViewById(R.id.profilePhoneNumber);
         profileEmail = findViewById(R.id.profileEmail);
         profilePassword = findViewById(R.id.profilePassword);
         profileSaveButton = findViewById(R.id.profileSaveButton);
+        profileDeleteButton = findViewById(R.id.deleteProfile);
 
-        profileName.setText(Storage.currentCustomer.getName());
-        profilePhoneNumber.setText(Storage.currentCustomer.getPhoneNumber());
-        profileEmail.setText(Storage.currentCustomer.getEmail());
-        profilePassword.setText(Storage.currentCustomer.getPassword());
+        profileName.setText(settings.getString("username", null));
+        profileEmail.setText(settings.getString("useremail", null));
+        profilePhoneNumber.setText(settings.getString("userphone", null));
+        profilePassword.setText(settings.getString("password", null));
 
-//
-//        database = FirebaseDatabase.getInstance();
-//        customer = database.getReference("customers").child(loggedinUser);
 
         profileSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 
                 String name = profileName.getText().toString();
                 String phone = profilePhoneNumber.getText().toString();
                 String email = profileEmail.getText().toString();
                 String password = profilePassword.getText().toString();
 
-
-                Toast.makeText(Profile.this, ""+name , Toast.LENGTH_SHORT).show();
                 Customer updateCustomer = new Customer(name, phone, email, password);
-                customers.child(phone).setValue(updateCustomer);
-                Storage.currentCustomer = updateCustomer;
+                customer.child(phone).setValue(updateCustomer);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putBoolean("loggedin", true);
+                editor.putString("username", name);
+                editor.putString("useremail", email);
+                editor.putString("password", password);
+                editor.commit();
+
+
             }
         });
 
+        profileDeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                String phone = profilePhoneNumber.getText().toString();
+                customer.child(phone).removeValue();
+                logout();
+                finish();
+            }
+        });
 
     }
 
