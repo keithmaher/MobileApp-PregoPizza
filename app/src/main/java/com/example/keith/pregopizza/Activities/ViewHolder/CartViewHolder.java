@@ -2,6 +2,7 @@ package com.example.keith.pregopizza.Activities.ViewHolder;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -31,6 +32,8 @@ public class CartViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         txt_cart_name = itemView.findViewById(R.id.cart_item_name);
         txt_cart_price = itemView.findViewById(R.id.cart_item_price);
         img_cart_count = itemView.findViewById(R.id.cart_item_count);
+
+        itemView.setOnClickListener(this);
     }
 
     public void setItemClickListener(ItemClickListener itemClickListener) {
@@ -41,4 +44,14 @@ public class CartViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     public void onClick(View view) {
         itemClickListener.onClick(view, getAdapterPosition(), false);
     }
+
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//
+//        String delete = "Delete";
+//
+//        menu.setHeaderTitle("Please Select");
+//        menu.add(0,0, getAdapterPosition(), delete);
+//
+//    }
 }

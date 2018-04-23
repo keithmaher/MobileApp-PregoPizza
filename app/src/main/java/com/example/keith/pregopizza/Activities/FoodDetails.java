@@ -85,14 +85,12 @@ public class FoodDetails extends AppCompatActivity {
 
     private void  saveData(){
 
-
         Order order = new Order(menuId, currentFood.getName(), quantityButton.getNumber(), currentFood.getPrice());
-        String uniqueID = UUID.randomUUID().toString();
 
         if (!settings.getBoolean("loggedin", false)){
             Toast.makeText(this, "Please login/Register", Toast.LENGTH_SHORT).show();
         }else {
-            carts.child(settings.getString("userphone", null)).child(uniqueID).setValue(order);
+            carts.child(settings.getString("userphone", null)).child(menuId).setValue(order);
             Toast.makeText(this, quantityButton.getNumber() + " " + currentFood.getName() + " added to your Cart", Toast.LENGTH_SHORT).show();
         }
 

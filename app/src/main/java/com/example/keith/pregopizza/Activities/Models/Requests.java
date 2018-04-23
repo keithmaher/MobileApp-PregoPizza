@@ -24,7 +24,7 @@ public class Requests {
         this.phone = phone;
         this.name = name;
         this.address = address;
-        this.status = "Placed";
+        this.status = "0";
         this.foods = foods;
     }
 

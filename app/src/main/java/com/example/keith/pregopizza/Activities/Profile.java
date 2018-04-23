@@ -76,16 +76,24 @@ public class Profile extends Navigation {
                 String email = profileEmail.getText().toString();
                 String password = profilePassword.getText().toString();
 
-                Customer updateCustomer = new Customer(name, phone, email, password);
-                customer.child(phone).setValue(updateCustomer);
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putBoolean("loggedin", true);
-                editor.putString("username", name);
-                editor.putString("useremail", email);
-                editor.putString("password", password);
-                editor.commit();
 
+                if (name.equals(settings.getString("username", null)) && email.equals(settings.getString("useremail", null)) && password.equals(settings.getString("password", null))){
+                    Toast.makeText(Profile.this, "No changes made", Toast.LENGTH_SHORT).show();
+                } else {
 
+                    Customer updateCustomer = new Customer(name, phone, email, password);
+                    customer.child(phone).setValue(updateCustomer);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putBoolean("loggedin", true);
+                    editor.putString("username", name);
+                    editor.putString("useremail", email);
+                    editor.putString("password", password);
+                    editor.commit();
+
+                    Intent change = new Intent(Profile.this, CategoryMenu.class);
+                    startActivity(change);
+                    Toast.makeText(Profile.this, "Details Saved", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

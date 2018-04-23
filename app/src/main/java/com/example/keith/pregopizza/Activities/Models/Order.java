@@ -8,8 +8,6 @@ import java.util.List;
 
 public class Order {
 
-    static int count = 1;
-    static int id;
     private String ProductId;
     private String ProductName;
     private String Quantity;
@@ -19,16 +17,12 @@ public class Order {
     }
 
     public Order(String productId, String productName, String quantity, String price) {
-        id = count ++;
         ProductId = productId;
         ProductName = productName;
         Quantity = quantity;
         Price = price;
     }
 
-    public static String getId() {
-        return String.valueOf(id);
-    }
 
     public String getProductId() {
         return ProductId;

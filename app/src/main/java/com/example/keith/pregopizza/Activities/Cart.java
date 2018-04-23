@@ -2,6 +2,8 @@ package com.example.keith.pregopizza.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
@@ -15,7 +17,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,12 +27,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
+import com.example.keith.pregopizza.Activities.Interface.ItemClickListener;
 import com.example.keith.pregopizza.Activities.Models.Order;
 import com.example.keith.pregopizza.Activities.Models.Requests;
 import com.example.keith.pregopizza.Activities.Sessions.Storage;
 import com.example.keith.pregopizza.Activities.ViewHolder.CartViewHolder;
 import com.example.keith.pregopizza.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -88,7 +94,7 @@ public class Cart extends Navigation{
         database = FirebaseDatabase.getInstance();
         carts = database.getReference("carts");
 
-        String user = settings.getString("userphone", null);
+        final String user = settings.getString("userphone", null);
         carts = carts.child(user);
 
         orders = database.getReference("orders");
@@ -106,6 +112,7 @@ public class Cart extends Navigation{
         carts.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+
 
                 Double rtotal = 0.0;
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
@@ -196,8 +203,7 @@ public class Cart extends Navigation{
 
             @Override
             protected void populateViewHolder(CartViewHolder viewHolder, final Order model, int position) {
-                TextDrawable drawable = TextDrawable.builder()
-                        .buildRound(""+model.getQuantity(), Color.RED);
+                TextDrawable drawable = TextDrawable.builder().buildRound(""+model.getQuantity(), Color.rgb(168,223,0));
                 viewHolder.img_cart_count.setImageDrawable(drawable);
 
                 double price = Double.parseDouble(model.getPrice());
@@ -206,6 +212,18 @@ public class Cart extends Navigation{
                 String runtotal = String.valueOf(total);
                 viewHolder.txt_cart_price.setText(runtotal);
                 viewHolder.txt_cart_name.setText(model.getProductName());
+
+                viewHolder.setItemClickListener(new ItemClickListener() {
+                    @Override
+                    public void onClick(View view, int position, boolean isLongClick) {
+                        int id = Integer.parseInt(model.getProductId());
+                        String amount = model.getQuantity();
+                        String name = model.getProductName();
+                       // Toast.makeText(Cart.this, "" +id, Toast.LENGTH_SHORT).show();
+                        deleteItemDialog(id, amount, name);
+                    }
+                });
+
             }
 
         };
@@ -214,6 +232,75 @@ public class Cart extends Navigation{
 
     }
 
+
+    public void deleteItemDialog(final int id, String amount, String name){
+        AlertDialog.Builder builder = new AlertDialog.Builder(Cart.this);
+        builder.setTitle("Item Removal");
+        builder.setMessage("You are about to remove " +amount + " " + name.toLowerCase() + " from your cart" );
+
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                carts.child(String.valueOf(id)).removeValue();
+                finish();
+                startActivity(getIntent());
+                Toast.makeText(Cart.this, "Succesfully Deleted ", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        AlertDialog dialogBox = builder.create();
+        dialogBox.show();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    @Override
+//    public boolean onContextItemSelected(MenuItem item) {
+//
+//        Toast.makeText(this, ""+item.getOrder(), Toast.LENGTH_SHORT).show();
+//
+//        if (item.getTitle().equals("Delete"))
+//            deleteCart(carts..getKey());
+//        return true;
+//    }
+//
+//    private void deleteCart(String id) {
+//        carts.child(id).removeValue();
+//    }
 
     @Override
     public void onBackPressed() {

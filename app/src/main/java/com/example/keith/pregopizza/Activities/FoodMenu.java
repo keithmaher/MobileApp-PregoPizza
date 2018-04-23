@@ -92,7 +92,6 @@ public class FoodMenu extends Navigation{
                 viewHolder.MenuName.setText(model.getName());
                 Picasso.with(getBaseContext()).load(model.getImage()).into(viewHolder.ImageView);
 
-                final MenuM local = model;
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
