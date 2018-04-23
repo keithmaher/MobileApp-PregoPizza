@@ -172,7 +172,7 @@ public class Cart extends Navigation{
 
                     String timeStamp = String.valueOf(System.currentTimeMillis());
 
-                    orders.child(Storage.currentCustomer.getPhoneNumber()).child(timeStamp).setValue(requests);
+                    orders.child(phone).child(timeStamp).setValue(requests);
                     carts.getRef().removeValue();
                     txtTotalPrice.setText("0");
                     dialog.dismiss();

@@ -116,7 +116,10 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
         } else if (id == R.id.nav_cart) {
             startAnimatedActivity(new Intent(getApplicationContext(), Cart.class));
             finish();
-        } else if (id == R.id.nav_location) {
+        } else if (id == R.id.nav_orders) {
+            startAnimatedActivity(new Intent(getApplicationContext(), Order.class));
+            finish();
+        }else if (id == R.id.nav_location) {
             startAnimatedActivity(new Intent(getApplicationContext(), Contact.class));
             finish();
         } else if (id == R.id.nav_profile) {

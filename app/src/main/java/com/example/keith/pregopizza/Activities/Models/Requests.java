@@ -13,6 +13,7 @@ public class Requests {
     private String phone;
     private String name;
     private String address;
+    private String status;
     private List<Order> foods;
 
     public Requests() {
@@ -23,7 +24,16 @@ public class Requests {
         this.phone = phone;
         this.name = name;
         this.address = address;
+        this.status = "Placed";
         this.foods = foods;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public static String getId() {
