@@ -64,7 +64,7 @@ public class Contact extends Navigation implements OnMapReadyCallback {
                     startActivity(callIntent);
                 }
             }
-            });
+        });
 
     }
 

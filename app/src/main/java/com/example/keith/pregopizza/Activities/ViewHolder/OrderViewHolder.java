@@ -11,7 +11,7 @@ import com.example.keith.pregopizza.R;
  * Created by Keith on 23/04/2018.
  */
 
-public class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class OrderViewHolder extends RecyclerView.ViewHolder{
 
     public TextView orderId, orderPhone, orderAddress, status;
 
@@ -25,17 +25,6 @@ public class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnC
         orderAddress = itemView.findViewById(R.id.order_address);
         status = itemView.findViewById(R.id.order_status);
 
-        itemView.setOnClickListener(this);
     }
 
-    public void setItemClickListener(ItemClickListener itemClickListener) {
-        this.itemClickListener = itemClickListener;
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        this.itemClickListener.onClick(v, getAdapterPosition(),false);
-
-    }
 }

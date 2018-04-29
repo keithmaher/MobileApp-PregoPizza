@@ -18,6 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="ExtraText">
+
         <activity android:name=".Activities.FoodDetails" />
         <activity
             android:name=".Activities.Cart"
@@ -52,8 +53,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".Activities.Profile" />
-        <activity android:name=".Activities.Order"></activity>
+        <activity android:name=".Activities.Profile"
+            android:label="Your Profile"/>
+        <activity android:name=".Activities.Order"
+            android:label="Your Orders"/>
+
     </application>
 
 </manifest>

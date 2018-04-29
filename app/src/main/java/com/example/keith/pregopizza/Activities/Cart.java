@@ -3,10 +3,8 @@ package com.example.keith.pregopizza.Activities;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -16,10 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,11 +25,9 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.example.keith.pregopizza.Activities.Interface.ItemClickListener;
 import com.example.keith.pregopizza.Activities.Models.Order;
 import com.example.keith.pregopizza.Activities.Models.Requests;
-import com.example.keith.pregopizza.Activities.Sessions.Storage;
 import com.example.keith.pregopizza.Activities.ViewHolder.CartViewHolder;
 import com.example.keith.pregopizza.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,13 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
-
-import static java.lang.System.currentTimeMillis;
 
 public class Cart extends Navigation{
 
@@ -219,7 +206,7 @@ public class Cart extends Navigation{
                         int id = Integer.parseInt(model.getProductId());
                         String amount = model.getQuantity();
                         String name = model.getProductName();
-                       // Toast.makeText(Cart.this, "" +id, Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(Cart.this, "" +id, Toast.LENGTH_SHORT).show();
                         deleteItemDialog(id, amount, name);
                     }
                 });
@@ -257,50 +244,6 @@ public class Cart extends Navigation{
         dialogBox.show();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    @Override
-//    public boolean onContextItemSelected(MenuItem item) {
-//
-//        Toast.makeText(this, ""+item.getOrder(), Toast.LENGTH_SHORT).show();
-//
-//        if (item.getTitle().equals("Delete"))
-//            deleteCart(carts..getKey());
-//        return true;
-//    }
-//
-//    private void deleteCart(String id) {
-//        carts.child(id).removeValue();
-//    }
 
     @Override
     public void onBackPressed() {

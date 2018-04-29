@@ -8,13 +8,19 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.keith.pregopizza.Activities.Models.Requests;
 import com.example.keith.pregopizza.Activities.ViewHolder.OrderViewHolder;
 import com.example.keith.pregopizza.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.DecimalFormat;
 
 public class Order extends Navigation {
 
@@ -25,7 +31,6 @@ public class Order extends Navigation {
 
     FirebaseDatabase database;
     DatabaseReference orders;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +56,19 @@ public class Order extends Navigation {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        loadOrders();
+        orders.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Toast.makeText(Order.this, "Orders Updating", Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        loadOrders();
 
     }
 
@@ -83,5 +99,3 @@ public class Order extends Navigation {
             return "Delivered";
     }
 }
-
-
